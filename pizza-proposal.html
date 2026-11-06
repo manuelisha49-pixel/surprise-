@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Little Surprise 🍕</title>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#7a2e3a;--pink:#f7a8b8;--pink2:#ffd3dc;--red:#e8505b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+body{background:linear-gradient(135deg,#ffc9d6 0%,#fdeee0 55%,#ffe2c4 100%);font-family:"Pixelify Sans","Courier New",monospace;color:var(--ink)}
+#hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#hearts i{position:absolute;bottom:-20px;font-style:normal;color:var(--red);opacity:.5;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+#stage{position:relative;height:100%;width:100%;max-width:520px;margin:0 auto}
+/* envelope */
+#env{position:absolute;left:50%;top:16%;width:150px;height:104px;margin-left:-75px;cursor:pointer;transition:transform .4s,opacity .5s}
+#env .body{position:absolute;inset:0;background:#fff4f1;border:3px solid #e98d98;border-radius:8px}
+#env .flap{position:absolute;left:0;top:0;width:100%;height:56px;transform-origin:top;transition:transform .5s;background:#ffc6d0;border:3px solid #e98d98;border-radius:8px 8px 0 0;clip-path:polygon(0 0,100% 0,50% 100%)}
+#env .seal{position:absolute;left:50%;top:44px;margin-left:-9px;color:var(--red);font-size:20px;z-index:2;transition:opacity .3s}
+#env.open .flap{transform:rotateX(180deg)}
+#env.open .seal{opacity:0}
+#env.shake{animation:sh .35s}
+@keyframes sh{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+#cap{position:absolute;left:0;right:0;top:calc(16% + 124px);text-align:center;font-size:15px;transition:opacity .4s}
+#hint{position:absolute;left:0;right:0;bottom:3%;text-align:center;font-size:12px;opacity:.7;transition:opacity .4s}
+/* bow */
+#bow{position:absolute;left:50%;bottom:14%;width:150px;height:90px;margin-left:-75px;cursor:grab;touch-action:none}
+#bow svg{width:100%;height:100%;overflow:visible}
+#string{transition:d .25s}
+#arrow{position:absolute;left:50%;width:6px;height:56px;margin-left:-3px;background:linear-gradient(#b9783a,#b9783a);border-radius:3px;opacity:0;z-index:5;pointer-events:none}
+#arrow:before{content:"";position:absolute;left:-5px;top:-9px;border:8px solid transparent;border-bottom:12px solid var(--red);border-top:0}
+/* window */
+#win{position:absolute;left:50%;top:50%;width:min(86vw,320px);transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;background:var(--pink2);border:3px solid #e98d98;box-shadow:0 12px 30px rgba(200,80,100,.25);transition:transform .5s cubic-bezier(.2,1.4,.4,1),opacity .3s;z-index:10}
+#win.show{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;font-size:12px;font-weight:700;background:var(--pink);border-bottom:3px solid #e98d98}
+.bar b{letter-spacing:.1em}.bar span{letter-spacing:4px;font-size:10px}
+.sub{text-align:center;font-size:10px;color:var(--red);padding:3px;background:#ffc3cf;border-bottom:3px solid #e98d98}
+.content{position:relative;padding:18px 14px 18px;text-align:center;background-color:#ffd9e0;background-image:linear-gradient(45deg,#ffc3cf 25%,transparent 25%,transparent 75%,#ffc3cf 75%),linear-gradient(45deg,#ffc3cf 25%,transparent 25%,transparent 75%,#ffc3cf 75%);background-size:16px 16px;background-position:0 0,8px 8px}
+#msg{font-size:19px;font-weight:700;line-height:1.25;min-height:72px}
+#cat{display:block;width:132px;margin:10px auto 6px;image-rendering:pixelated;shape-rendering:crispEdges;transition:transform .3s}
+#cat.happy{animation:hop .5s infinite alternate}
+@keyframes hop{to{transform:translateY(-8px)}}
+.btn{font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);background:#fff4f1;border:3px solid #e98d98;border-radius:4px;padding:6px 18px;cursor:pointer;box-shadow:0 3px 0 #e98d98}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #e98d98}
+#yes{position:relative;z-index:3;transition:transform .2s}
+#no{position:absolute;left:50%;top:132px;margin-left:-22px;z-index:4;padding:3px 10px;font-size:12px;transition:transform .25s}
+#btns{height:44px}
+.pop{position:fixed;pointer-events:none;z-index:50;font-size:22px;animation:pop 1.6s ease-out forwards}
+@keyframes pop{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div id="stage">
+  <div id="env"><div class="body"></div><div class="seal">♥</div><div class="flap"></div></div>
+  <div id="cap">♥ A Little Surprise ♥</div>
+  <div id="arrow"></div>
+  <div id="bow">
+    <svg viewBox="0 0 150 90"><path d="M10 80 Q75 -10 140 80" fill="none" stroke="#b9783a" stroke-width="7" stroke-linecap="round"/><path id="string" d="M10 80 Q75 80 140 80" fill="none" stroke="#e7c9a0" stroke-width="2"/></svg>
+  </div>
+  <div id="hint">Hold the bow, pull down, then let go to shoot ♡<br>(or just tap the envelope)</div>
+  <div id="win">
+    <div class="bar"><b>LOVE</b><span>_ □ ×</span></div>
+    <div class="sub">♥ · ♥ · ♥</div>
+    <div class="content">
+      <div id="msg">Hey you ♡<br>Wanna eat pizza with me tomorrow? 🍕</div>
+      <svg id="cat" viewBox="0 0 12 12"></svg>
+      <button class="btn" id="no">NO</button>
+      <div id="btns"><button class="btn" id="yes">YES</button></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  // floating hearts
+  var hb=$('hearts');
+  for(var i=0;i<22;i++){var h=document.createElement('i');h.textContent='♥';h.style.left=Math.random()*100+'%';h.style.fontSize=(7+Math.random()*10)+'px';h.style.animationDuration=(8+Math.random()*10)+'s';h.style.animationDelay=(-Math.random()*14)+'s';hb.appendChild(h)}
+  // pixel cat
+  var map=['.B........B.','.BB......BB.','.BBBBBBBBBB.','BBBBBBBBBBBB','BWWBBBBBBWWB','BWBBBBBBBBWB','BBBBBBBBBBBB','.BBRRBBRRBB.','.BBRRRRRRBB.','..BBRRRRBB..','...BBRRBB...','....BRRB....'];
+  var col={B:'#1b1b1f',W:'#fff',R:'#e8283c'},s='';
+  map.forEach(function(r,y){for(var x=0;x<12;x++){var c=r[x];if(c!=='.')s+='<rect x="'+x+'" y="'+y+'" width="1.02" height="1.02" fill="'+col[c]+'"/>'}});
+  $('cat').innerHTML=s+'<rect x="1" y="6" width="1" height="1" fill="#ff9db0"/><rect x="10" y="6" width="1" height="1" fill="#ff9db0"/>';
+  // open envelope + show letter
+  var opened=false,env=$('env'),win=$('win');
+  function openLetter(){
+    if(opened)return;opened=true;
+    env.classList.add('open');
+    burst(env.getBoundingClientRect(),6);
+    setTimeout(function(){env.style.opacity=0;$('cap').style.opacity=0;$('bow').style.opacity=0;$('bow').style.pointerEvents='none';$('hint').style.opacity=0},700);
+    setTimeout(function(){win.classList.add('show')},900);
+  }
+  env.addEventListener('click',openLetter);
+  // bow
+  var bow=$('bow'),arrow=$('arrow'),str=$('string'),drawing=false,startY=0,pull=0;
+  bow.addEventListener('pointerdown',function(e){if(opened)return;drawing=true;startY=e.clientY;bow.setPointerCapture(e.pointerId);bow.style.cursor='grabbing'});
+  bow.addEventListener('pointermove',function(e){
+    if(!drawing)return;
+    pull=Math.max(0,Math.min(50,e.clientY-startY));if(pull<8)pull=Math.max(pull,8);
+    str.setAttribute('d','M10 80 Q75 '+(80+pull)+' 140 80');
+    var r=bow.getBoundingClientRect();
+    arrow.style.transition='none';arrow.style.opacity=1;
+    arrow.style.top=(r.top+30+pull*.6)+'px';arrow.style.transform='none';
+  });
+  function release(){
+    if(!drawing)return;drawing=false;bow.style.cursor='grab';
+    str.setAttribute('d','M10 80 Q75 80 140 80');
+    var er=env.getBoundingClientRect(),y=er.top+er.height/2-28;
+    arrow.style.transition='top .45s ease-in,opacity .2s .4s';
+    arrow.style.top=y+'px';
+    setTimeout(function(){arrow.style.opacity=0;env.classList.add('shake');openLetter()},430);
+  }
+  bow.addEventListener('pointerup',release);
+  bow.addEventListener('pointercancel',release);
+  // NO button dodges
+  var no=$('no'),yes=$('yes'),dodges=0;
+  function dodge(e){
+    if(e){e.preventDefault();e.stopPropagation()}
+    dodges++;
+    var c=win.querySelector('.content').getBoundingClientRect();
+    var dx=(Math.random()-.5)*(c.width-90),dy=(Math.random()-.2)*(c.height-150);
+    no.style.transform='translate('+dx+'px,'+dy+'px)';
+    yes.style.transform='scale('+Math.min(1+dodges*.12,1.9)+')';
+    var lines=['Hey you ♡<br>Wanna eat pizza with me tomorrow? 🍕','Are you sure? 🥺<br>Pizza tomorrow?','Pretty please? 🍕♡','The NO button is broken 😤<br>Just press YES!'];
+    $('msg').innerHTML=lines[Math.min(dodges,lines.length-1)];
+  }
+  ['pointerenter','pointerdown','touchstart','click'].forEach(function(ev){no.addEventListener(ev,dodge,{passive:false})});
+  // YES
+  yes.addEventListener('click',function(){
+    $('msg').innerHTML='Yayyy! I knew it ♡<br>Pizza tomorrow! 🍕';
+    no.style.display='none';$('btns').style.display='none';
+    $('cat').classList.add('happy');
+    var r=win.getBoundingClientRect();
+    for(var k=0;k<4;k++)setTimeout(function(){burst(r,16)},k*350);
+  });
+  function burst(r,n){
+    var em=['♥','💖','💗','🍕','✨','💕'];
+    for(var i=0;i<n;i++){
+      var p=document.createElement('div');p.className='pop';
+      p.textContent=em[Math.floor(Math.random()*em.length)];
+      p.style.left=(r.left+r.width/2)+'px';p.style.top=(r.top+r.height/2)+'px';
+      p.style.color='#e8505b';
+      p.style.setProperty('--dx',((Math.random()-.5)*360)+'px');
+      p.style.setProperty('--dy',((Math.random()-.8)*360)+'px');
+      p.style.setProperty('--r',((Math.random()-.5)*120)+'deg');
+      document.body.appendChild(p);
+      setTimeout(function(el){return function(){el.remove()}}(p),1700);
+    }
+  }
+})();
+</script>
+</body>
+</html>
