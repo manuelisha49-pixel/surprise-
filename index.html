@@ -65,7 +65,7 @@ body{background:linear-gradient(135deg,#ffc9d6 0%,#fdeee0 55%,#ffe2c4 100%);font
     <div class="bar"><b>LOVE</b><span>_ □ ×</span></div>
     <div class="sub">♥ · ♥ · ♥</div>
     <div class="content">
-      <div id="msg">Hey you ♡<br>Wanna eat pizza with me tomorrow? 🍕</div>
+      <div id="msg">Hi Bebi♡<br>Wanna eat pizza with me tomorrow? 🍕</div>
       <svg id="cat" viewBox="0 0 12 12"></svg>
       <button class="btn" id="no">NO</button>
       <div id="btns"><button class="btn" id="yes">YES</button></div>
@@ -123,13 +123,13 @@ body{background:linear-gradient(135deg,#ffc9d6 0%,#fdeee0 55%,#ffe2c4 100%);font
     var dx=(Math.random()-.5)*(c.width-90),dy=(Math.random()-.2)*(c.height-150);
     no.style.transform='translate('+dx+'px,'+dy+'px)';
     yes.style.transform='scale('+Math.min(1+dodges*.12,1.9)+')';
-    var lines=['Hey you ♡<br>Wanna eat pizza with me tomorrow? 🍕','Are you sure? 🥺<br>Pizza tomorrow?','Pretty please? 🍕♡','The NO button is broken 😤<br>Just press YES!'];
+    var lines=['Hi Bebi♡<br>Wanna eat pizza with me tomorrow? 🍕','Are you sure? 🥺<br>Pizza tomorrow?','Pretty please? 🍕♡','The NO button is broken 😤<br>Just press YES!'];
     $('msg').innerHTML=lines[Math.min(dodges,lines.length-1)];
   }
   ['pointerenter','pointerdown','touchstart','click'].forEach(function(ev){no.addEventListener(ev,dodge,{passive:false})});
   // YES
   yes.addEventListener('click',function(){
-    $('msg').innerHTML='Yayyy! I knew it ♡<br>Pizza tomorrow! 🍕';
+    $('msg').innerHTML='Yayyy! I love you po♡<br>Pizza ka sakin bukas! 🍕';
     no.style.display='none';$('btns').style.display='none';
     $('cat').classList.add('happy');
     var r=win.getBoundingClientRect();
